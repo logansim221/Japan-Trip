@@ -1,9 +1,11 @@
 'use client'
 import { useState } from 'react'
+import dynamic from 'next/dynamic'
 import { tripMeta, cambodiaItinerary, japanItinerary, transportInfo, bookingChecklist } from './data'
 import { useProfile } from './components/comments-store'
 import { ProfileSetup } from './components/ProfileSetup'
 import { CommentSection } from './components/CommentSection'
+const TripMap = dynamic(() => import('./components/TripMap'), { ssr: false })
 
 const COLORS = {
   red:   { bg: '#fdf1ee', border: '#e8b4a8', accent: '#c8402a', text: '#7a2518' },
@@ -185,6 +187,7 @@ export default function TripDashboard() {
 
   const sections = [
     { id: 'overview', label: 'Overview' },
+    { id: 'map', label: 'Map' },
     { id: 'cambodia', label: 'Cambodia' },
     { id: 'japan', label: 'Japan' },
     { id: 'transport', label: 'Transport' },
@@ -307,6 +310,16 @@ export default function TripDashboard() {
             ))}
           </div>
           <CommentSection sectionId="overview-general" sectionTitle="the trip overall" profile={profile} onNeedProfile={() => setShowProfileSetup(true)} />
+        </section>
+
+        {/* Map */}
+        <section id="map" style={{ marginBottom: 64 }}>
+          <SectionTitle>🗺️ Route map</SectionTitle>
+          <div style={{ marginBottom: 16, fontSize: 14, color: '#4a4540', fontStyle: 'italic' }}>
+            Click any city to see how to get there and what's waiting
+          </div>
+          <TripMap profile={profile} onNeedProfile={() => setShowProfileSetup(true)} />
+          <CommentSection sectionId="map-general" sectionTitle="the route and cities" profile={profile} onNeedProfile={() => setShowProfileSetup(true)} />
         </section>
 
         {/* Cambodia */}
